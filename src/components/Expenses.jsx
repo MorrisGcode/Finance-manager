@@ -34,7 +34,7 @@ const Expenses = ({ user }) => {
       limit(5)  
     );
 
-    // Set up real-time listener
+    
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const expensesData = [];
       let total = 0;

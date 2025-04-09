@@ -96,7 +96,7 @@ h1 {
     }
 }
 
-/* Responsive Design */
+/*Responsive Design*/
 @media (max-width: 768px) {
     .landing-container {
         padding: 1rem;

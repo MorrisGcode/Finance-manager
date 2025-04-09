@@ -14,7 +14,7 @@ const Dashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (!user) return;
 
-    // Fetch income total
+    //income total
     const incomeQuery = query(
       collection(db, 'income'),
       where('userId', '==', user.uid)
@@ -29,7 +29,7 @@ const Dashboard = ({ user, onLogout }) => {
       setTotalIncome(total);
     });
 
-    // Cleanup subscription on unmount
+    
     return () => {
       unsubscribeIncome();
     };
@@ -38,7 +38,7 @@ const Dashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (!user) return;
 
-    // Fetch expenses
+    // expenses
     const expensesQuery = query(
       collection(db, 'expenses'),
       where('userId', '==', user.uid),
