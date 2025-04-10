@@ -8,6 +8,7 @@ import Landing from './components/Landing';
 import Expenses from './components/Expenses';
 import AllExpenses from './components/AllExpenses';
 import Income from './components/Income';
+import AllIncomes from './components/AllIncomes';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -59,6 +60,12 @@ function App() {
             path="/add-income" 
             element={
               user ? <Income user={user} /> : <Navigate to="/login" />
+            } 
+          />
+          <Route 
+            path="/all-incomes" 
+            element={
+              user ? <AllIncomes user={user} /> : <Navigate to="/login" />
             } 
           />
         </Routes>

@@ -1,0 +1,91 @@
+.all-incomes-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.all-incomes-header {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.incomes-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.incomes-table th,
+.incomes-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.incomes-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+}
+
+.incomes-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.amount {
+    font-weight: 600;
+    color: #4CAF50;
+    font-size: 1.2rem;
+}
+
+.no-incomes {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    grid-column: 1 / -1;
+}
+
+.back-btn {
+    margin-top: 2rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #6A5ACD;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: #483D8B;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .all-incomes-container {
+        padding: 1rem;
+    }
+    
+    .table-container {
+        margin: 0 -1rem;
+        border-radius: 0;
+    }
+}

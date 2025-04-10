@@ -1,36 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '/config/firebase';
-import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, orderBy, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import './AllExpenses.css';
+import '../css/AllExpenses.css';
 
 const AllExpenses = ({ user }) => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) return;
 
-    const q = query(
-      collection(db, 'expenses'),
-      where('userId', '==', user.uid),
-      orderBy('date', 'desc')
-    );
+    try {
+      const q = query(
+        collection(db, 'expenses'),
+        where('userId', '==', user.uid),
+        orderBy('timestamp', 'desc') 
+      );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const expensesData = [];
-      querySnapshot.forEach((doc) => {
-        expensesData.push({
-          id: doc.id,
-          ...doc.data()
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const expensesData = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          expensesData.push({
+            id: doc.id,
+            ...data,
+            // date format
+            date: data.date || data.timestamp?.toDate().toISOString().split('T')[0]
+          });
         });
+        setExpenses(expensesData);
+        setLoading(false);
+      }, (error) => {
+        console.error("Error fetching expenses:", error);
+        setError("Failed to load expenses");
+        setLoading(false);
       });
-      setExpenses(expensesData);
-      setLoading(false);
-    });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    } catch (err) {
+      console.error("Error setting up expenses listener:", err);
+      setError("Failed to load expenses");
+      setLoading(false);
+    }
   }, [user]);
 
   return (
@@ -41,24 +55,34 @@ const AllExpenses = ({ user }) => {
 
       {loading ? (
         <div className="loading">Loading expenses...</div>
+      ) : error ? (
+        <div className="error">{error}</div>
       ) : (
         <>
-          <div className="expenses-grid">
+          <div className="table-container">
             {expenses.length === 0 ? (
               <p className="no-expenses">No expenses recorded yet.</p>
             ) : (
-              expenses.map((expense) => (
-                <div key={expense.id} className="expense-card">
-                  <div className="expense-header">
-                    <h3>{expense.description}</h3>
-                    <span className="amount">Ksh{Number(expense.amount).toFixed(2)}</span>
-                  </div>
-                  <div className="expense-body">
-                    <p className="category">{expense.category}</p>
-                    <p className="date">{new Date(expense.date).toLocaleDateString()}</p>
-                  </div>
-                </div>
-              ))
+              <table className="expenses-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expenses.map((expense) => (
+                    <tr key={expense.id}>
+                      <td>{new Date(expense.date).toLocaleDateString()}</td>
+                      <td>{expense.description}</td>
+                      <td>{expense.category}</td>
+                      <td className="amount">Ksh{Number(expense.amount).toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             )}
           </div>
           <button 
@@ -74,3 +98,4 @@ const AllExpenses = ({ user }) => {
 };
 
 export default AllExpenses;
+

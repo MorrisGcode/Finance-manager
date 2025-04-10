@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '/config/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import "./Login.css";
+import "../css/Login.css";
 
 const Login = ({user, setUser}) => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const Login = ({user, setUser}) => {
           lastLogin: new Date().toISOString()
         });
         
-        // Automatically sign in after successful signup
+        // Automatically signin
         await signInWithEmailAndPassword(auth, email, password);
         setUser(userCredential.user);
         console.log("Signed up and logged in:", userCredential.user);
@@ -52,7 +52,7 @@ const Login = ({user, setUser}) => {
         
         setSuccess("Sign up successful! You are now logged in.");
         
-        // Clear success message after 3 seconds
+        
         setTimeout(() => {
           setSuccess("");
         }, 3000);

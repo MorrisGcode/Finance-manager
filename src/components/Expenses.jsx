@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '/config/firebase';
-import { collection, addDoc, query, where, getDocs, onSnapshot, orderBy, limit } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, onSnapshot, orderBy, limit, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import './Expenses.css';
+import '../css/Expenses.css';
+import CategoryManager from './CategoryManager';
 
 const EXPENSE_CATEGORIES = [
   'Utilities',
@@ -21,12 +22,12 @@ const Expenses = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [expenses, setExpenses] = useState([]);
+  const [customCategories, setCustomCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!user) return;
 
-    
     const q = query(
       collection(db, 'expenses'),
       where('userId', '==', user.uid),
@@ -34,7 +35,6 @@ const Expenses = ({ user }) => {
       limit(5)  
     );
 
-    
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const expensesData = [];
       let total = 0;
@@ -55,36 +55,48 @@ const Expenses = ({ user }) => {
     return () => unsubscribe();
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(db, 'expenseCategories'),
+      where('userId', '==', user.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const categoriesData = snapshot.docs.map(doc => doc.data().name);
+      setCustomCategories(categoriesData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     try {
-      const expenseData = {
-        amount: parseFloat(amount),
+      await addDoc(collection(db, 'expenses'), {
+        amount: Number(amount),
         category,
         description,
         date,
         userId: user.uid,
+        timestamp: serverTimestamp(), // Add server timestamp
         createdAt: new Date().toISOString()
-      };
+      });
 
-      
-      await addDoc(collection(db, 'expenses'), expenseData);
-
-      
+      // Clear form
       setAmount('');
       setDescription('');
-      setDate(new Date().toISOString().split('T')[0]);
-      setCategory('Utilities');
-
+      setDate('');
+      setCategory('');
       
+      // Navigate back to dashboard
       navigate('/dashboard');
-      
     } catch (error) {
-      setError('Failed to add expense: ' + error.message);
       console.error('Error adding expense:', error);
+      setError('Failed to add expense');
     } finally {
       setLoading(false);
     }
@@ -99,7 +111,7 @@ const Expenses = ({ user }) => {
       <div className="summary-section">
         <div className="total-expenses-card">
           <h3>Total Expenses</h3>
-          <p className="total-amount">${totalExpenses.toFixed(2)}</p>
+          <p className="total-amount">Ksh{totalExpenses.toFixed(2)}</p>
         </div>
       </div>
 
@@ -112,10 +124,11 @@ const Expenses = ({ user }) => {
             onChange={(e) => setCategory(e.target.value)}
             required
           >
-            {EXPENSE_CATEGORIES.map((cat) => (
+            {EXPENSE_CATEGORIES.concat(customCategories).map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
+          <CategoryManager user={user} />
         </div>
 
         <div className="form-group">

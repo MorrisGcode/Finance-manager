@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '/config/firebase';
-import { collection, addDoc } from 'firebase/firestore';
-import './Income.css';
+import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore';
+import '../css/Income.css';
+import IncomeCategoryManager from './IncomeCategoryManager';
 
 const INCOME_CATEGORIES = [
   'Salary',
@@ -18,7 +19,24 @@ function Income({ user }) {
   const [category, setCategory] = useState('Salary');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
+  const [customCategories, setCustomCategories] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(db, 'incomeCategories'),
+      where('userId', '==', user.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const categoriesData = snapshot.docs.map(doc => doc.data().name);
+      setCustomCategories(categoriesData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,10 +76,11 @@ function Income({ user }) {
             onChange={(e) => setCategory(e.target.value)}
             required
           >
-            {INCOME_CATEGORIES.map((cat) => (
+            {INCOME_CATEGORIES.concat(customCategories).map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
+          <IncomeCategoryManager user={user} />
         </div>
 
         <div className="form-group">
