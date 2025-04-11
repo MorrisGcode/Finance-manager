@@ -401,35 +401,12 @@
   color: #666;
 }
 
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
 
-/* Update the category card styles */
-.category-card {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 6px;
-  padding: 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 160px;
-}
 
 .category-content {
   flex: 1;
 }
 
-.category-card h3 {
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 1.1rem;
-}
 
 .category-meta {
   color: #666;

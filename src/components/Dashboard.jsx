@@ -1,18 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { db } from '/config/firebase';
-import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import '../css/Dashboard.css';
-import Expenses from './Expenses';
-import CategoryManager from './CategoryManager';
-import IncomeCategoryManager from './IncomeCategoryManager';
+import React, { useState, useEffect } from "react";
+import { db } from "/config/firebase";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+  limit,
+} from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import "../css/Dashboard.css";
+import Expenses from "./Expenses";
+import CategoryManager from "./CategoryManager";
+import IncomeCategoryManager from "./IncomeCategoryManager";
 
 const Dashboard = ({ user, onLogout }) => {
   const [expenses, setExpenses] = useState([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
   const [showCategoryManager, setShowCategoryManager] = useState(false);
-  const [showIncomeCategoryManager, setShowIncomeCategoryManager] = useState(false);
+  const [showIncomeCategoryManager, setShowIncomeCategoryManager] =
+    useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
@@ -21,8 +29,8 @@ const Dashboard = ({ user, onLogout }) => {
 
     //income total
     const incomeQuery = query(
-      collection(db, 'income'),
-      where('userId', '==', user.uid)
+      collection(db, "income"),
+      where("userId", "==", user.uid)
     );
 
     const unsubscribeIncome = onSnapshot(incomeQuery, (querySnapshot) => {
@@ -42,45 +50,50 @@ const Dashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (!user) return;
 
-    
     const totalExpensesQuery = query(
-      collection(db, 'expenses'),
-      where('userId', '==', user.uid)
+      collection(db, "expenses"),
+      where("userId", "==", user.uid)
     );
 
     // display recent  3
     const recentExpensesQuery = query(
-      collection(db, 'expenses'),
-      where('userId', '==', user.uid),
-      orderBy('date', 'desc'),
+      collection(db, "expenses"),
+      where("userId", "==", user.uid),
+      orderBy("date", "desc"),
       limit(3)
     );
 
     // total expenses
-    const unsubscribeTotalExpenses = onSnapshot(totalExpensesQuery, (querySnapshot) => {
-      let total = 0;
-      querySnapshot.forEach((doc) => {
-        const expense = doc.data();
-        total += Number(expense.amount) || 0;
-      });
-      setTotalExpenses(total);
-    });
+    const unsubscribeTotalExpenses = onSnapshot(
+      totalExpensesQuery,
+      (querySnapshot) => {
+        let total = 0;
+        querySnapshot.forEach((doc) => {
+          const expense = doc.data();
+          total += Number(expense.amount) || 0;
+        });
+        setTotalExpenses(total);
+      }
+    );
 
     // Listen for recent expenses
-    const unsubscribeRecentExpenses = onSnapshot(recentExpensesQuery, (querySnapshot) => {
-      const expensesData = [];
-      querySnapshot.forEach((doc) => {
-        const expense = {
-          id: doc.id,
-          ...doc.data()
-        };
-        expensesData.push({
-          ...expense,
-          amount: Number(expense.amount) || 0
+    const unsubscribeRecentExpenses = onSnapshot(
+      recentExpensesQuery,
+      (querySnapshot) => {
+        const expensesData = [];
+        querySnapshot.forEach((doc) => {
+          const expense = {
+            id: doc.id,
+            ...doc.data(),
+          };
+          expensesData.push({
+            ...expense,
+            amount: Number(expense.amount) || 0,
+          });
         });
-      });
-      setExpenses(expensesData);
-    });
+        setExpenses(expensesData);
+      }
+    );
 
     // Cleanup both listeners
     return () => {
@@ -93,14 +106,14 @@ const Dashboard = ({ user, onLogout }) => {
     if (!user) return;
 
     const categoriesQuery = query(
-      collection(db, 'expenseCategories'),
-      where('userId', '==', user.uid)
+      collection(db, "expenseCategories"),
+      where("userId", "==", user.uid)
     );
 
     const unsubscribe = onSnapshot(categoriesQuery, (snapshot) => {
-      const categoriesData = snapshot.docs.map(doc => ({
+      const categoriesData = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
       setCategories(categoriesData);
     });
@@ -115,42 +128,44 @@ const Dashboard = ({ user, onLogout }) => {
           <h3>Menu</h3>
         </div>
         <nav className="menu-items">
-          <button 
+          <button
             onClick={() => {
-              navigate('/dashboard');
+              navigate("/dashboard");
               setShowCategoryManager(false);
               setShowIncomeCategoryManager(false);
             }}
-            className={`menu-item ${(!showCategoryManager && !showIncomeCategoryManager) ? 'active' : ''}`}
+            className={`menu-item ${
+              !showCategoryManager && !showIncomeCategoryManager ? "active" : ""
+            }`}
           >
             Dashboard
           </button>
-          <button 
+          <button
             onClick={() => {
               setShowCategoryManager(true);
               setShowIncomeCategoryManager(false);
             }}
-            className={`menu-item ${showCategoryManager ? 'active' : ''}`}
+            className={`menu-item ${showCategoryManager ? "active" : ""}`}
           >
             Manage Expense Categories
           </button>
-          <button 
+          <button
             onClick={() => {
               setShowCategoryManager(false);
               setShowIncomeCategoryManager(true);
             }}
-            className={`menu-item ${showIncomeCategoryManager ? 'active' : ''}`}
+            className={`menu-item ${showIncomeCategoryManager ? "active" : ""}`}
           >
             Manage Income Categories
           </button>
-          <button 
-            onClick={() => navigate('/all-expenses')}
+          <button
+            onClick={() => navigate("/all-expenses")}
             className="menu-item"
           >
             All Expenses
           </button>
-          <button 
-            onClick={() => navigate('/all-incomes')}
+          <button
+            onClick={() => navigate("/all-incomes")}
             className="menu-item"
           >
             All Incomes
@@ -168,19 +183,6 @@ const Dashboard = ({ user, onLogout }) => {
               <h2>Expense Categories</h2>
               <p>Manage your expense categories here</p>
             </header>
-
-            <div className="categories-grid">
-              {categories.map(category => (
-                <div key={category.id} className="category-card">
-                  <h3>{category.name}</h3>
-                  <div className="category-meta">
-                    <span className="category-date">
-                      Added: {new Date(category.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
 
             <CategoryManager user={user} />
           </div>
@@ -203,8 +205,8 @@ const Dashboard = ({ user, onLogout }) => {
                 <div className="summary-card income">
                   <h3>Total Income</h3>
                   <p className="total-amount">Ksh{totalIncome.toFixed(2)}</p>
-                  <button 
-                    onClick={() => navigate('/add-income')} 
+                  <button
+                    onClick={() => navigate("/add-income")}
                     className="add-income-btn"
                   >
                     Add Income
@@ -214,8 +216,8 @@ const Dashboard = ({ user, onLogout }) => {
                   <h3>Total Expenses</h3>
                   <p className="total-amount">Ksh{totalExpenses.toFixed(2)}</p>
                   <div className="expense-buttons">
-                    <button 
-                      onClick={() => navigate('/add-expense')} 
+                    <button
+                      onClick={() => navigate("/add-expense")}
                       className="add-expense-btn"
                     >
                       Add Expense
@@ -224,7 +226,9 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
                 <div className="summary-card balance">
                   <h3>Balance</h3>
-                  <p className="total-amount">Ksh{(totalIncome - totalExpenses).toFixed(2)}</p>
+                  <p className="total-amount">
+                    Ksh{(totalIncome - totalExpenses).toFixed(2)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -244,7 +248,9 @@ const Dashboard = ({ user, onLogout }) => {
                           {new Date(expense.date).toLocaleDateString()}
                         </p>
                       </div>
-                      <p className="expense-amount">Ksh{expense.amount.toFixed(2)}</p>
+                      <p className="expense-amount">
+                        Ksh{expense.amount.toFixed(2)}
+                      </p>
                     </div>
                   ))
                 )}
