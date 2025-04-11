@@ -24,7 +24,6 @@ const CategoryManager = ({ user }) => {
         id: doc.id,
         ...doc.data()
       }));
-      console.log('Fetched categories:', categoriesData); // Debug log
       setCategories(categoriesData);
     });
 
@@ -43,11 +42,11 @@ const CategoryManager = ({ user }) => {
         userId: user.uid,
         createdAt: new Date().toISOString()
       };
-      console.log('Adding category:', newCategoryData); // Debug log
+      console.log('Adding category:', newCategoryData); 
       await addDoc(collection(db, 'expenseCategories'), newCategoryData);
       setNewCategory('');
     } catch (error) {
-      console.error('Error adding category:', error); // Debug log
+      console.error('Error adding category:', error); 
       setError('Failed to add category');
     } finally {
       setLoading(false);
@@ -94,7 +93,7 @@ const CategoryManager = ({ user }) => {
 
   return (
     <div className="category-manager">
-      <h3>Manage Categories</h3>
+      <h3>Manage Expense Categories</h3>
       {error && <p className="error-message">{error}</p>}
       
       <div className="table-container">
