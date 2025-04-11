@@ -29,7 +29,6 @@ const Dashboard = ({ user, onLogout }) => {
       setTotalIncome(total);
     });
 
-    
     return () => {
       unsubscribeIncome();
     };
@@ -38,34 +37,50 @@ const Dashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (!user) return;
 
-    // expenses
-    const expensesQuery = query(
+    
+    const totalExpensesQuery = query(
       collection(db, 'expenses'),
-      where('userId', '==', user.uid),
-      orderBy('date', 'desc'), 
-      limit(3) 
+      where('userId', '==', user.uid)
     );
 
-    const unsubscribeExpenses = onSnapshot(expensesQuery, (querySnapshot) => {
-      const expensesData = [];
-      let total = 0;
+    // display recent  3
+    const recentExpensesQuery = query(
+      collection(db, 'expenses'),
+      where('userId', '==', user.uid),
+      orderBy('date', 'desc'),
+      limit(3)
+    );
 
+    // total expenses
+    const unsubscribeTotalExpenses = onSnapshot(totalExpensesQuery, (querySnapshot) => {
+      let total = 0;
+      querySnapshot.forEach((doc) => {
+        const expense = doc.data();
+        total += Number(expense.amount) || 0;
+      });
+      setTotalExpenses(total);
+    });
+
+    // Listen for recent expenses
+    const unsubscribeRecentExpenses = onSnapshot(recentExpensesQuery, (querySnapshot) => {
+      const expensesData = [];
       querySnapshot.forEach((doc) => {
         const expense = {
           id: doc.id,
           ...doc.data()
         };
-        const amount = Number(expense.amount) || 0;
-        expensesData.push({ ...expense, amount });
-        total += amount;
+        expensesData.push({
+          ...expense,
+          amount: Number(expense.amount) || 0
+        });
       });
-
       setExpenses(expensesData);
-      setTotalExpenses(total);
     });
 
+    // Cleanup both listeners
     return () => {
-      unsubscribeExpenses();
+      unsubscribeTotalExpenses();
+      unsubscribeRecentExpenses();
     };
   }, [user]);
 
