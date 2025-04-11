@@ -128,7 +128,6 @@ const Expenses = ({ user }) => {
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
-          <CategoryManager user={user} />
         </div>
 
         <div className="form-group">

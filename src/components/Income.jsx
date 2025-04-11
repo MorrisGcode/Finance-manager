@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '/config/firebase';
 import { collection, addDoc, query, where, onSnapshot } from 'firebase/firestore';
 import '../css/Income.css';
-import IncomeCategoryManager from './IncomeCategoryManager';
 
 const INCOME_CATEGORIES = [
   'Salary',
@@ -14,7 +13,6 @@ const INCOME_CATEGORIES = [
 ];
 
 function Income({ user }) {
-  const [incomeList, setIncomeList] = useState([]);
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('Salary');
   const [description, setDescription] = useState('');
@@ -59,6 +57,9 @@ function Income({ user }) {
       setDescription('');
       setCategory('Salary');
       setLoading(false);
+      
+      // Navigate back to dashboard after successful submission
+      navigate('/dashboard');
     } catch (error) {
       console.error('Error adding income:', error);
       setLoading(false);
@@ -67,7 +68,7 @@ function Income({ user }) {
 
   return (
     <div className="income-container">
-      <h2>Income Tracker</h2>
+      <h2>Add Income</h2>
       <form onSubmit={handleSubmit} className="income-form">
         <div className="form-group">
           <label>Category:</label>
@@ -80,7 +81,6 @@ function Income({ user }) {
               <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
-          <IncomeCategoryManager user={user} />
         </div>
 
         <div className="form-group">

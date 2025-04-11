@@ -51,34 +51,59 @@ const IncomeCategoryManager = ({ user }) => {
     }
   };
 
+  const handleEditCategory = (categoryId) => {
+    // Placeholder for edit functionality
+    console.log(`Edit category with ID: ${categoryId}`);
+  };
+
   return (
     <div className="category-manager income-category-manager">
-      <h3>Manage Income Categories</h3>
-      {error && <p className="error-message">{error}</p>}
-      
-      <form onSubmit={handleAddCategory} className="add-category-form">
-        <input
-          type="text"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          placeholder="New income category"
-          className="category-input"
-        />
-        <button type="submit" className="add-category-btn">Add</button>
-      </form>
+      <div className="table-container">
+        <table className="categories-table">
+          <thead>
+            <tr>
+              <th>Category Name</th>
+              <th>Date Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.map(category => (
+              <tr key={category.id} className="category-row">
+                <td>{category.name}</td>
+                <td>{new Date(category.createdAt).toLocaleDateString()}</td>
+                <td className="action-buttons">
+                  <button 
+                    onClick={() => handleEditCategory(category.id)}
+                    className="edit-btn"
+                  >
+                    Edit
+                  </button>
+                  <button 
+                    onClick={() => handleDeleteCategory(category.id)}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <div className="categories-list">
-        {categories.map(category => (
-          <div key={category.id} className="category-item">
-            <span>{category.name}</span>
-            <button 
-              onClick={() => handleDeleteCategory(category.id)}
-              className="delete-category-btn"
-            >
-              ×
-            </button>
-          </div>
-        ))}
+      <div className="add-category-section">
+        {error && <p className="error-message">{error}</p>}
+        <form onSubmit={handleAddCategory} className="add-category-form">
+          <input
+            type="text"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            placeholder="New income category"
+            className="category-input"
+          />
+          <button type="submit" className="add-category-btn">Add Category</button>
+        </form>
       </div>
     </div>
   );

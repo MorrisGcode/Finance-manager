@@ -4,11 +4,16 @@ import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/f
 import { useNavigate } from 'react-router-dom';
 import '../css/Dashboard.css';
 import Expenses from './Expenses';
+import CategoryManager from './CategoryManager';
+import IncomeCategoryManager from './IncomeCategoryManager';
 
 const Dashboard = ({ user, onLogout }) => {
   const [expenses, setExpenses] = useState([]);
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
+  const [showCategoryManager, setShowCategoryManager] = useState(false);
+  const [showIncomeCategoryManager, setShowIncomeCategoryManager] = useState(false);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,6 +89,25 @@ const Dashboard = ({ user, onLogout }) => {
     };
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return;
+
+    const categoriesQuery = query(
+      collection(db, 'expenseCategories'),
+      where('userId', '==', user.uid)
+    );
+
+    const unsubscribe = onSnapshot(categoriesQuery, (snapshot) => {
+      const categoriesData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setCategories(categoriesData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
   return (
     <div className="dashboard-layout">
       <div className="side-menu">
@@ -92,10 +116,32 @@ const Dashboard = ({ user, onLogout }) => {
         </div>
         <nav className="menu-items">
           <button 
-            onClick={() => navigate('/dashboard')}
-            className="menu-item active"
+            onClick={() => {
+              navigate('/dashboard');
+              setShowCategoryManager(false);
+              setShowIncomeCategoryManager(false);
+            }}
+            className={`menu-item ${(!showCategoryManager && !showIncomeCategoryManager) ? 'active' : ''}`}
           >
             Dashboard
+          </button>
+          <button 
+            onClick={() => {
+              setShowCategoryManager(true);
+              setShowIncomeCategoryManager(false);
+            }}
+            className={`menu-item ${showCategoryManager ? 'active' : ''}`}
+          >
+            Manage Expense Categories
+          </button>
+          <button 
+            onClick={() => {
+              setShowCategoryManager(false);
+              setShowIncomeCategoryManager(true);
+            }}
+            className={`menu-item ${showIncomeCategoryManager ? 'active' : ''}`}
+          >
+            Manage Income Categories
           </button>
           <button 
             onClick={() => navigate('/all-expenses')}
@@ -116,62 +162,96 @@ const Dashboard = ({ user, onLogout }) => {
       </div>
 
       <div className="dashboard-container">
-        <header className="dashboard-header">
-          <h1>Welcome, {user?.displayName || user.email}!</h1>
-        </header>
+        {showCategoryManager ? (
+          <div className="categories-dashboard">
+            <header className="categories-header">
+              <h2>Expense Categories</h2>
+              <p>Manage your expense categories here</p>
+            </header>
 
-        <div className="dashboard-summary">
-          <div className="summary-cards">
-            <div className="summary-card income">
-              <h3>Total Income</h3>
-              <p className="total-amount">Ksh{totalIncome.toFixed(2)}</p>
-              <button 
-                onClick={() => navigate('/add-income')} 
-                className="add-income-btn"
-              >
-                Add Income
-              </button>
+            <div className="categories-grid">
+              {categories.map(category => (
+                <div key={category.id} className="category-card">
+                  <h3>{category.name}</h3>
+                  <div className="category-meta">
+                    <span className="category-date">
+                      Added: {new Date(category.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="summary-card expenses">
-              <h3>Total Expenses</h3>
-              <p className="total-amount">Ksh{totalExpenses.toFixed(2)}</p>
-              <div className="expense-buttons">
-                <button 
-                  onClick={() => navigate('/add-expense')} 
-                  className="add-expense-btn"
-                >
-                  Add Expense
-                </button>
+
+            <CategoryManager user={user} />
+          </div>
+        ) : showIncomeCategoryManager ? (
+          <div className="categories-dashboard">
+            <header className="categories-header">
+              <h2>Income Categories</h2>
+              <p>Manage your income categories here</p>
+            </header>
+            <IncomeCategoryManager user={user} />
+          </div>
+        ) : (
+          <>
+            <header className="dashboard-header">
+              <h1>Welcome, {user?.displayName || user.email}!</h1>
+            </header>
+
+            <div className="dashboard-summary">
+              <div className="summary-cards">
+                <div className="summary-card income">
+                  <h3>Total Income</h3>
+                  <p className="total-amount">Ksh{totalIncome.toFixed(2)}</p>
+                  <button 
+                    onClick={() => navigate('/add-income')} 
+                    className="add-income-btn"
+                  >
+                    Add Income
+                  </button>
+                </div>
+                <div className="summary-card expenses">
+                  <h3>Total Expenses</h3>
+                  <p className="total-amount">Ksh{totalExpenses.toFixed(2)}</p>
+                  <div className="expense-buttons">
+                    <button 
+                      onClick={() => navigate('/add-expense')} 
+                      className="add-expense-btn"
+                    >
+                      Add Expense
+                    </button>
+                  </div>
+                </div>
+                <div className="summary-card balance">
+                  <h3>Balance</h3>
+                  <p className="total-amount">Ksh{(totalIncome - totalExpenses).toFixed(2)}</p>
+                </div>
               </div>
             </div>
-            <div className="summary-card balance">
-              <h3>Balance</h3>
-              <p className="total-amount">Ksh{(totalIncome - totalExpenses).toFixed(2)}</p>
-            </div>
-          </div>
-        </div>
 
-        <div className="dashboard-main">
-          <h2>Recent Expenses</h2>
-          <div className="expenses-list">
-            {expenses.length === 0 ? (
-              <p className="no-expenses">No expenses recorded yet.</p>
-            ) : (
-              expenses.map((expense) => (
-                <div key={expense.id} className="expense-item">
-                  <div className="expense-info">
-                    <h3>{expense.description}</h3>
-                    <p className="expense-category">{expense.category}</p>
-                    <p className="expense-date">
-                      {new Date(expense.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <p className="expense-amount">Ksh{expense.amount.toFixed(2)}</p>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
+            <div className="dashboard-main">
+              <h2>Recent Expenses</h2>
+              <div className="expenses-list">
+                {expenses.length === 0 ? (
+                  <p className="no-expenses">No expenses recorded yet.</p>
+                ) : (
+                  expenses.map((expense) => (
+                    <div key={expense.id} className="expense-item">
+                      <div className="expense-info">
+                        <h3>{expense.description}</h3>
+                        <p className="expense-category">{expense.category}</p>
+                        <p className="expense-date">
+                          {new Date(expense.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <p className="expense-amount">Ksh{expense.amount.toFixed(2)}</p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

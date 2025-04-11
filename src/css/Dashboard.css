@@ -35,6 +35,7 @@
 }
 
 .menu-item {
+  width: 100%;
   padding: 0.75rem 1rem;
   text-align: left;
   background: none;
@@ -43,12 +44,10 @@
   cursor: pointer;
   color: #666;
   transition: all 0.3s ease;
-  font-size: 1rem;
 }
 
 .menu-item:hover {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: #e9ecef;
 }
 
 .menu-item.active {
@@ -61,6 +60,7 @@
   margin-left: 250px;
   padding: 2rem;
   background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 .dashboard-header {
@@ -360,6 +360,125 @@
 
   .dashboard-container {
     margin-left: 0;
+    padding: 1rem;
+  }
+}
+
+/* Add styles for category manager integration */
+.category-manager {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.category-manager.income-category-manager {
+  border-color: #4CAF50;
+}
+
+/* Category Management Styles */
+.categories-dashboard {
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.categories-header {
+  margin-bottom: 2rem;
+}
+
+.categories-header h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.categories-header p {
+  color: #666;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Update the category card styles */
+.category-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+}
+
+.category-content {
+  flex: 1;
+}
+
+.category-card h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.category-meta {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.category-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+.category-actions button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #2196F3;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1976D2;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categories-dashboard {
     padding: 1rem;
   }
 }
