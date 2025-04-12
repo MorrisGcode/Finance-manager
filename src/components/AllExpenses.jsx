@@ -49,8 +49,14 @@ const AllExpenses = ({ user }) => {
 
   return (
     <div className="all-expenses-container">
-      <header className="all-expenses-header">
-        <h1>All Expenses</h1>
+      <header className="expenses-header">
+        <h2>All Expenses</h2>
+        <button
+          onClick={() => navigate("/add-expense")}
+          className="add-expense-btn"
+        >
+          Add New Expense
+        </button>
       </header>
 
       {loading ? (
@@ -58,40 +64,32 @@ const AllExpenses = ({ user }) => {
       ) : error ? (
         <div className="error">{error}</div>
       ) : (
-        <>
-          <div className="table-container">
-            {expenses.length === 0 ? (
-              <p className="no-expenses">No expenses recorded yet.</p>
-            ) : (
-              <table className="expenses-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Amount</th>
+        <div className="table-container">
+          {expenses.length === 0 ? (
+            <p className="no-expenses">No expenses recorded yet.</p>
+          ) : (
+            <table className="expenses-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expenses.map((expense) => (
+                  <tr key={expense.id}>
+                    <td>{new Date(expense.date).toLocaleDateString()}</td>
+                    <td>{expense.description}</td>
+                    <td>{expense.category}</td>
+                    <td className="amount">Ksh{Number(expense.amount).toFixed(2)}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {expenses.map((expense) => (
-                    <tr key={expense.id}>
-                      <td>{new Date(expense.date).toLocaleDateString()}</td>
-                      <td>{expense.description}</td>
-                      <td>{expense.category}</td>
-                      <td className="amount">Ksh{Number(expense.amount).toFixed(2)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-          <button 
-            onClick={() => navigate('/dashboard')}
-            className="back-btn"
-          >
-            Back to Dashboard
-          </button>
-        </>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       )}
     </div>
   );

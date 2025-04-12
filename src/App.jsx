@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { auth } from '/config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import Login from './components/Login';
-import Dashboard from './components/Dashboard';
-import Landing from './components/Landing';
-import Expenses from './components/Expenses';
-import AllExpenses from './components/AllExpenses';
-import Income from './components/Income';
-import AllIncomes from './components/AllIncomes';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { auth } from "/config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import Layout from "./components/Layout";
+import Login from "./components/Login";
+import Dashboard from "./components/Dashboard";
+import Landing from "./components/Landing";
+import Expenses from "./components/Expenses";
+import AllExpenses from "./components/AllExpenses";
+import Income from "./components/Income";
+import AllIncomes from "./components/AllIncomes";
+import Savings from "./components/Savings";
+import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -24,52 +32,54 @@ function App() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-screen">
+        <div className="loading-spinner"></div>
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (
     <Router>
-      <div className="App">
+      {!user ? (
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route 
-            path="/login" 
-            element={
-              user ? <Navigate to="/dashboard" /> : <Login user={user} setUser={setUser} />
-            } 
+          <Route
+            path="/login"
+            element={<Login user={user} setUser={setUser} />}
           />
-          <Route 
-            path="/dashboard" 
-            element={
-              user ? <Dashboard user={user} onLogout={() => auth.signOut()} /> : <Navigate to="/login" />
-            } 
-          />
-          <Route 
-            path="/add-expense" 
-            element={
-              user ? <Expenses user={user} /> : <Navigate to="/login" />
-            } 
-          />
-          <Route 
-            path="/all-expenses" 
-            element={
-              user ? <AllExpenses user={user} /> : <Navigate to="/login" />
-            } 
-          />
-          <Route 
-            path="/add-income" 
-            element={
-              user ? <Income user={user} /> : <Navigate to="/login" />
-            } 
-          />
-          <Route 
-            path="/all-incomes" 
-            element={
-              user ? <AllIncomes user={user} /> : <Navigate to="/login" />
-            } 
-          />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
-      </div>
+      ) : (
+        <Layout user={user} onLogout={() => auth.signOut()}>
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard user={user} />} />
+            <Route
+              path="/add-expense"
+              element={<Expenses user={user} />}
+            />
+            <Route
+              path="/all-expenses"
+              element={<AllExpenses user={user} />}
+            />
+            <Route
+              path="/add-income"
+              element={<Income user={user} />}
+            />
+            <Route
+              path="/all-incomes"
+              element={<AllIncomes user={user} />}
+            />
+            <Route
+              path="/add-savings"
+              element={<Savings user={user} />}
+            />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Layout>
+      )}
     </Router>
   );
 }

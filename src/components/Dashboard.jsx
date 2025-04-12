@@ -170,6 +170,12 @@ const Dashboard = ({ user, onLogout }) => {
           >
             All Incomes
           </button>
+          <button
+            onClick={() => navigate("/add-savings")}
+            className="menu-item savings-btn"
+          >
+            <span>Savings Goals</span>
+          </button>
         </nav>
         <button onClick={onLogout} className="logout-btn">
           Logout
@@ -205,24 +211,10 @@ const Dashboard = ({ user, onLogout }) => {
                 <div className="summary-card income">
                   <h3>Total Income</h3>
                   <p className="total-amount">Ksh{totalIncome.toFixed(2)}</p>
-                  <button
-                    onClick={() => navigate("/add-income")}
-                    className="add-income-btn"
-                  >
-                    Add Income
-                  </button>
                 </div>
                 <div className="summary-card expenses">
                   <h3>Total Expenses</h3>
                   <p className="total-amount">Ksh{totalExpenses.toFixed(2)}</p>
-                  <div className="expense-buttons">
-                    <button
-                      onClick={() => navigate("/add-expense")}
-                      className="add-expense-btn"
-                    >
-                      Add Expense
-                    </button>
-                  </div>
                 </div>
                 <div className="summary-card balance">
                   <h3>Balance</h3>

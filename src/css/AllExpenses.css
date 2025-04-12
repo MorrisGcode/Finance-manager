@@ -2,9 +2,6 @@
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
 }
 
 .all-expenses-header {
@@ -13,6 +10,33 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.expenses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.expenses-header h2 {
+    color: #2d3748;
+    margin: 0;
+}
+
+.add-expense-btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #48bb78;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.add-expense-btn:hover {
+    background-color: #38a169;
 }
 
 .expenses-grid {
@@ -89,7 +113,6 @@
     text-align: center;
     padding: 2rem;
     color: #666;
-    grid-column: 1 / -1;
 }
 
 .table-container {

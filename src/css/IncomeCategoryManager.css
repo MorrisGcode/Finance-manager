@@ -20,7 +20,7 @@
 }
 
 .category-input {
-  flex: 1;
+  width: 100%;
   padding: 0.75rem;
   border: 1px solid #dee2e6;
   border-radius: 4px;
@@ -34,7 +34,6 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .add-category-btn:hover {
@@ -117,7 +116,6 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
 .edit-btn {
@@ -145,5 +143,10 @@
   
   .add-category-btn {
     width: 100%;
+  }
+
+  .table-container {
+    margin: 0 -1rem;
+    border-radius: 0;
   }
 }

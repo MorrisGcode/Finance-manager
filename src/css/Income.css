@@ -69,3 +69,9 @@
 .back-btn:hover {
   background-color: #483D8B;
 }
+
+@media (max-width: 768px) {
+  .income-container {
+    padding: 1rem;
+  }
+}
