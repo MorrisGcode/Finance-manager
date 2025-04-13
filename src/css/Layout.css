@@ -66,8 +66,8 @@
 
 .main-content {
   flex: 1;
-  margin-left: 260px;
-  padding: 2rem;
+  margin-left: 100px;
+  padding: 0;
   background-color: #f7fafc;
 }
 

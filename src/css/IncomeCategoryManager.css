@@ -1,14 +1,14 @@
 .income-category-manager {
-  margin-top: 0.5rem;
-  padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  border: 1px solid #dee2e6;
+  height: 100%;
+  padding: 1.5rem;
+  background-color: white;
+  border: none;
+  border-radius: 0;
 }
 
 .add-category-section {
-  margin-top: 2rem;
-  padding: 1.5rem;
+  margin-top: 1rem;
+  padding: 1rem;
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #dee2e6;
@@ -21,7 +21,7 @@
 
 .category-input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #dee2e6;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -71,7 +71,14 @@
 
 .error-message {
   color: #f44336;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+}
+
+.no-categories {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
 }
 
 .table-container {
@@ -85,12 +92,11 @@
 .categories-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 600px;
 }
 
 .categories-table th,
 .categories-table td {
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   text-align: left;
   border-bottom: 1px solid #dee2e6;
 }
@@ -116,6 +122,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 0.8rem;
 }
 
 .edit-btn {
@@ -137,6 +144,10 @@
 }
 
 @media (max-width: 768px) {
+  .income-category-manager {
+    padding: 1rem;
+  }
+  
   .add-category-form {
     flex-direction: column;
   }

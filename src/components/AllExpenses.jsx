@@ -17,7 +17,8 @@ const AllExpenses = ({ user }) => {
       const q = query(
         collection(db, 'expenses'),
         where('userId', '==', user.uid),
-        orderBy('timestamp', 'desc') 
+        // where('type', '==', 'expense'),
+        orderBy('createdAt', 'desc')
       );
 
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -27,8 +28,8 @@ const AllExpenses = ({ user }) => {
           expensesData.push({
             id: doc.id,
             ...data,
-            // date format
-            date: data.date || data.timestamp?.toDate().toISOString().split('T')[0]
+            date: data.date || new Date(data.createdAt).toISOString().split('T')[0],
+            amount: typeof data.amount === 'string' ? parseFloat(data.amount) : data.amount
           });
         });
         setExpenses(expensesData);
@@ -47,10 +48,17 @@ const AllExpenses = ({ user }) => {
     }
   }, [user]);
 
+  const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
+
   return (
     <div className="all-expenses-container">
       <header className="expenses-header">
-        <h2>All Expenses</h2>
+        <div className="header-content">
+          <h2>All Expenses</h2>
+          <div className="total-expenses">
+            Total: Ksh{totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </div>
+        </div>
         <button
           onClick={() => navigate("/add-expense")}
           className="add-expense-btn"
@@ -75,6 +83,7 @@ const AllExpenses = ({ user }) => {
                   <th>Description</th>
                   <th>Category</th>
                   <th>Amount</th>
+                  <th>Type</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,7 +92,8 @@ const AllExpenses = ({ user }) => {
                     <td>{new Date(expense.date).toLocaleDateString()}</td>
                     <td>{expense.description}</td>
                     <td>{expense.category}</td>
-                    <td className="amount">Ksh{Number(expense.amount).toFixed(2)}</td>
+                    <td className="amount">Ksh{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td>{expense.category === 'Savings' ? 'Savings' : 'Regular Expense'}</td>
                   </tr>
                 ))}
               </tbody>

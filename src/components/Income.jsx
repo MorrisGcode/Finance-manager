@@ -105,22 +105,13 @@ function Income({ user }) {
           />
         </div>
 
-        <div className="button-group">
-          <button 
-            type="submit" 
-            className="submit-btn"
-            disabled={loading}
-          >
-            {loading ? 'Adding...' : 'Add Income'}
-          </button>
-          <button 
-            type="button" 
-            onClick={() => navigate('/dashboard')}
-            className="back-btn"
-          >
-            Back to Dashboard
-          </button>
-        </div>
+        <button 
+          type="submit" 
+          className="submit-btn"
+          disabled={loading}
+        >
+          {loading ? 'Adding...' : 'Add Income'}
+        </button>
       </form>
     </div>
   );

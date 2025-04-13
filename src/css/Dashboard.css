@@ -58,30 +58,29 @@
 .dashboard-container {
   flex: 1;
   margin-left: 250px;
-  padding: 2rem;
-  background-color: #f8f9fa;
+  padding: 1.5rem;
+  background-color: white;
   min-height: 100vh;
 }
 
 .dashboard-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .dashboard-header h1 {
   margin: 0;
-  color: #333;
+  color: #2d3748;
 }
 
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .summary-card {
-  background-color: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -90,25 +89,25 @@
 .summary-card h3 {
   margin: 0;
   font-size: 1.1rem;
-  color: #666;
+  color: #4a5568;
 }
 
 .summary-card.income {
-  border-left: 4px solid #4CAF50;
+  border-left: 4px solid #48bb78;
 }
 
 .summary-card.expenses {
-  border-left: 4px solid #f44336;
+  border-left: 4px solid #f56565;
 }
 
 .summary-card.balance {
-  border-left: 4px solid #2196F3;
+  border-left: 4px solid #4299e1;
 }
 
 .total-amount {
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 1rem 0 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1rem;
 }
 
 .income .total-amount {
@@ -198,6 +197,5 @@
 
   .summary-cards {
     grid-template-columns: 1fr;
-    gap: 1rem;
   }
 }

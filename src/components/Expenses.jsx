@@ -164,19 +164,13 @@ const Expenses = ({ user }) => {
           />
         </div>
 
-        <div className="button-group">
-          <button 
-            type="submit" 
-            className="submit-btn" 
-            disabled={loading}
-          >
-            {loading ? 'Adding...' : 'Add Expense'}
-          </button>
-          <button 
-            type="button"
-            onClick={() => navigate('/dashboard')}
-            className="back-btn"> Back to Dashboard</button>
-        </div>
+        <button 
+          type="submit" 
+          className="submit-btn" 
+          disabled={loading}
+        >
+          {loading ? 'Adding...' : 'Add Expense'}
+        </button>
       </form>
 
       <div className="recent-expenses">

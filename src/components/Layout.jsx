@@ -20,14 +20,14 @@ const Layout = ({ user, onLogout, children }) => {
             Dashboard
           </button>
           <button
-            onClick={() => navigate("/manage-expenses")}
-            className={`menu-item ${location.pathname === '/manage-expenses' ? 'active' : ''}`}
+            onClick={() => navigate("/expenses")}
+            className={`menu-item ${location.pathname === '/expenses' ? 'active' : ''}`}
           >
             Manage Expenses
           </button>
           <button
-            onClick={() => navigate("/manage-income")}
-            className={`menu-item ${location.pathname === '/manage-income' ? 'active' : ''}`}
+            onClick={() => navigate("/income")}
+            className={`menu-item ${location.pathname === '/income' ? 'active' : ''}`}
           >
             Manage Income
           </button>
@@ -47,7 +47,7 @@ const Layout = ({ user, onLogout, children }) => {
             onClick={() => navigate("/savings")}
             className={`menu-item ${location.pathname === '/savings' ? 'active' : ''}`}
           >
-            Savings Goals
+            Savings
           </button>
         </nav>
         <button onClick={onLogout} className="logout-btn">

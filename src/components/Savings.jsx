@@ -53,7 +53,8 @@ function Savings({ user }) {
 
       const progress = Math.min((initialAmount / targetNum) * 100, 100);
 
-      const savingData = {
+      // First create the saving goal
+      const savingRef = await addDoc(collection(db, 'savings'), {
         title: title.trim(),
         description: description.trim(),
         targetAmount: targetNum,
@@ -61,12 +62,29 @@ function Savings({ user }) {
         userId: user.uid,
         createdAt: new Date().toISOString(),
         progress: Number(progress.toFixed(2))
-      };
+      });
 
-      await addDoc(collection(db, 'savings'), savingData);
+      // If there's an initial amount, create an expense record
+      if (initialAmount > 0) {
+        const expenseData = {
+          amount: initialAmount,
+          category: 'Savings',
+          description: `Initial contribution to savings goal: ${title.trim()}`,
+          userId: user.uid,
+          date: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          savingId: savingRef.id,
+          savingTitle: title.trim(),
+          type: 'expense' // Add this field
+        };
+
+        await addDoc(collection(db, 'expenses'), expenseData);
+      }
+
       resetForm();
       setShowModal(false);
     } catch (error) {
+      console.error('Error:', error);
       setError('Failed to add saving goal');
     } finally {
       setLoading(false);
@@ -92,13 +110,34 @@ function Savings({ user }) {
     }
 
     try {
+      const savingDoc = savings.find(s => s.id === savingId);
+      
+      // First add the amount as an expense
+      const expenseData = {
+        amount: newAmount,
+        category: 'Savings',
+        description: `Contribution to savings goal: ${savingDoc.title}`,
+        userId: user.uid,
+        date: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        type: 'expense',
+        savingId: savingId,
+        savingTitle: savingDoc.title
+      };
+
+      await addDoc(collection(db, 'expenses'), expenseData);
+
+      // Then update the savings amount
       const updatedAmount = currentAmount + newAmount;
       await updateDoc(doc(db, 'savings', savingId), {
         currentAmount: updatedAmount,
         progress: (updatedAmount / Number(targetAmount)) * 100,
         updatedAt: new Date().toISOString()
       });
+
+      setError('');
     } catch (error) {
+      console.error('Error:', error);
       setError('Failed to update amount');
     }
   };

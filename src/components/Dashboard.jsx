@@ -172,9 +172,9 @@ const Dashboard = ({ user, onLogout }) => {
           </button>
           <button
             onClick={() => navigate("/add-savings")}
-            className="menu-item savings-btn"
+            className="menu-item"
           >
-            <span>Savings Goals</span>
+            <span>Savings Goal</span>
           </button>
         </nav>
         <button onClick={onLogout} className="logout-btn">
