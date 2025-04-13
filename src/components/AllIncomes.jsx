@@ -85,7 +85,7 @@ const AllIncomes = ({ user }) => {
                     <td className="category-cell">
                       <span className="category-tag">{income.category}</span>
                     </td>
-                    <td className="amount-cell">
+                    <td className="income-amount-cell">
                       Ksh {Number(income.amount).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2

@@ -1,9 +1,11 @@
+/* Container Styles */
 .all-expenses-container {
     padding: 2rem;
     max-width: 1200px;
     margin-left: 150px;
 }
 
+/* Header Styles */
 .all-expenses-header {
     margin-bottom: 2rem;
     padding: 1rem;
@@ -39,6 +41,7 @@
     background-color: #38a169;
 }
 
+/* Expenses Grid */
 .expenses-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -65,10 +68,26 @@
     font-size: 1.2rem;
 }
 
+/* Amount Display */
 .amount {
+    font-weight: 600;
+    color: #f44336; /* Red color for expenses */
+    font-size: 1.2rem;
+}
+
+.expenses-table td.amount {
+    color: #f44336; /* Ensure table amounts are also red */
+    font-weight: 600;
+}
+
+.expense-amount-cell {
     font-weight: 600;
     color: #f44336;
     font-size: 1.2rem;
+}
+
+.expenses-table .expense-amount-cell {
+    color: #f44336;
 }
 
 .category {
@@ -86,35 +105,15 @@
     margin: 0;
 }
 
-.back-btn {
-    margin-top: 2rem;
-    padding: 0.75rem 1.5rem;
-    background-color: #6A5ACD;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    align-self: center;
-    transition: background-color 0.3s ease;
-}
-
-.back-btn:hover {
-    background-color: #483D8B;
-}
-
-.loading {
-    text-align: center;
-    padding: 2rem;
-    color: #666;
-}
-
+/* Status Messages */
+.loading,
 .no-expenses {
     text-align: center;
     padding: 2rem;
     color: #666;
 }
 
+/* Table Styles */
 .table-container {
     background: white;
     border-radius: 8px;

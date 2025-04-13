@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "/config/firebase";
+import { db } from "/config/firebase"; 
 import {
   collection,
   query,
@@ -27,24 +27,39 @@ const Dashboard = ({ user, onLogout }) => {
   useEffect(() => {
     if (!user) return;
 
-    //income total
-    const incomeQuery = query(
-      collection(db, "income"),
-      where("userId", "==", user.uid)
-    );
+    try {
+      const incomeQuery = query(
+        collection(db, "income"),
+        where("userId", "==", user.uid),
+        orderBy("createdAt", "desc")
+      );
 
-    const unsubscribeIncome = onSnapshot(incomeQuery, (querySnapshot) => {
-      let total = 0;
-      querySnapshot.forEach((doc) => {
-        const income = doc.data();
-        total += Number(income.amount) || 0;
+      const unsubscribeIncome = onSnapshot(incomeQuery, (querySnapshot) => {
+        let total = 0;
+        querySnapshot.forEach((doc) => {
+          const income = doc.data();
+          // Handle different amount formats and ensure it's a number
+          let amount = 0;
+          if (typeof income.amount === 'string') {
+            amount = parseFloat(income.amount) || 0;
+          } else if (typeof income.amount === 'number') {
+            amount = income.amount;
+          }
+          total += amount;
+        });
+        
+        console.log('Total Income Updated:', total); // Debug log
+        setTotalIncome(total);
+      }, (error) => {
+        console.error("Error fetching income:", error);
+        setTotalIncome(0); // Set to 0 on error
       });
-      setTotalIncome(total);
-    });
 
-    return () => {
-      unsubscribeIncome();
-    };
+      return () => unsubscribeIncome();
+    } catch (error) {
+      console.error("Error setting up income listener:", error);
+      setTotalIncome(0); // Set to 0 on error
+    }
   }, [user]);
 
   useEffect(() => {
@@ -52,25 +67,27 @@ const Dashboard = ({ user, onLogout }) => {
 
     const totalExpensesQuery = query(
       collection(db, "expenses"),
-      where("userId", "==", user.uid)
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc") // Change from "date" to "createdAt"
     );
 
-    // display recent  3
     const recentExpensesQuery = query(
       collection(db, "expenses"),
       where("userId", "==", user.uid),
-      orderBy("date", "desc"),
+      orderBy("createdAt", "desc"), // Change from "date" to "createdAt"
       limit(3)
     );
 
-    // total expenses
+    // Total expenses listener (including savings)
     const unsubscribeTotalExpenses = onSnapshot(
       totalExpensesQuery,
       (querySnapshot) => {
         let total = 0;
         querySnapshot.forEach((doc) => {
           const expense = doc.data();
-          total += Number(expense.amount) || 0;
+          total += typeof expense.amount === 'string' 
+            ? parseFloat(expense.amount) 
+            : expense.amount || 0;
         });
         setTotalExpenses(total);
       }
@@ -177,7 +194,11 @@ const Dashboard = ({ user, onLogout }) => {
             <span>Savings Goal</span>
           </button>
         </nav>
-        <button onClick={onLogout} className="logout-btn">
+        <button 
+          onClick={onLogout} 
+          className="logout-btn"
+          disabled={!user}
+        >
           Logout
         </button>
       </div>
@@ -210,16 +231,29 @@ const Dashboard = ({ user, onLogout }) => {
               <div className="summary-cards">
                 <div className="summary-card income">
                   <h3>Total Income</h3>
-                  <p className="total-amount">Ksh{totalIncome.toFixed(2)}</p>
+                  <p className="total-amount">
+                    Ksh {totalIncome.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })}
+                  </p>
                 </div>
                 <div className="summary-card expenses">
                   <h3>Total Expenses</h3>
-                  <p className="total-amount">Ksh{totalExpenses.toFixed(2)}</p>
+                  <p className="total-amount">
+                    Ksh {totalExpenses.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })}
+                  </p>
                 </div>
                 <div className="summary-card balance">
                   <h3>Balance</h3>
                   <p className="total-amount">
-                    Ksh{(totalIncome - totalExpenses).toFixed(2)}
+                    Ksh {(totalIncome - totalExpenses).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2
+                    })}
                   </p>
                 </div>
               </div>

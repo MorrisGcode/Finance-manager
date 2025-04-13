@@ -15,6 +15,7 @@ import IncomeCategoryManager from './components/IncomeCategoryManager';
 import AllIncomes from './components/AllIncomes';
 import AllExpenses from './components/AllExpenses';
 import Savings from './components/Savings';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -29,6 +30,10 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  const handleLogout = () => {
+    auth.signOut();
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -42,15 +47,19 @@ function App() {
         {/* Protected Routes */}
         <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
         
-        <Route path="/dashboard" element={
-          user ? (
-            <Layout user={user}>
-              <Dashboard user={user} />
-            </Layout>
-          ) : (
-            <Navigate to="/login" />
-          )
-        } />
+        <Route 
+          path="/dashboard" 
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Dashboard 
+                  user={user} 
+                  onLogout={handleLogout} 
+                />
+              </Layout>
+            </PrivateRoute>
+          } 
+        />
 
         <Route path="/income" element={
           user ? (

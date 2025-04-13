@@ -26,7 +26,7 @@
 
 .add-income-btn {
     padding: 0.75rem 1.5rem;
-    background-color: #4299e1;
+    background-color: #48bb78;
     color: white;
     border: none;
     border-radius: 6px;
@@ -36,7 +36,7 @@
 }
 
 .add-income-btn:hover {
-    background-color: #3182ce;
+    background-color: #38a169;
 }
 
 .table-container {
@@ -67,6 +67,17 @@
 
 .incomes-table tr:hover {
     background-color: #f8f9fa;
+}
+
+/* Amount Display */
+.income-amount-cell {
+    font-weight: 600;
+    color: #4CAF50;
+    font-size: 1.2rem;
+}
+
+.incomes-table .income-amount-cell {
+    color: #4CAF50;
 }
 
 .amount {

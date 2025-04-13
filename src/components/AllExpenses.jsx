@@ -89,11 +89,24 @@ const AllExpenses = ({ user }) => {
               <tbody>
                 {expenses.map((expense) => (
                   <tr key={expense.id}>
-                    <td>{new Date(expense.date).toLocaleDateString()}</td>
-                    <td>{expense.description}</td>
-                    <td>{expense.category}</td>
-                    <td className="amount">Ksh{expense.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                    <td>{expense.category === 'Savings' ? 'Savings' : 'Regular Expense'}</td>
+                    <td data-label="Date">
+                      {new Date(expense.date).toLocaleDateString()}
+                    </td>
+                    <td data-label="Description">
+                      {expense.description}
+                    </td>
+                    <td data-label="Category">
+                      {expense.category}
+                    </td>
+                    <td data-label="Amount" className="expense-amount-cell">
+                      Ksh {Number(expense.amount).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                      })}
+                    </td>
+                    <td data-label="Type">
+                      {expense.category === 'Savings' ? 'Savings' : 'Regular Expense'}
+                    </td>
                   </tr>
                 ))}
               </tbody>
