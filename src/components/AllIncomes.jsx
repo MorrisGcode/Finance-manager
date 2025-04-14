@@ -89,7 +89,7 @@ const incomePieChartData = Object.entries(incomeCategoryTotals).map(([category, 
   name: category,
   value: total,
 }));
-
+// default colors for the pie chart
 const COLORS = ['#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#AF19FF', '#8884d8', '#a8328e'];
 
 

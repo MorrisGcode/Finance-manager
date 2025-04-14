@@ -108,7 +108,7 @@ const AllExpenses = ({ user }) => {
         value: total,
     }));
 
-    // Define custom colors for the pie chart
+    // custom colors for the pie chart
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#8884d8', '#a8328e'];
 
     return (
