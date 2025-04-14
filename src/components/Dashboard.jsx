@@ -4,6 +4,8 @@ import { collection, query, where, onSnapshot, orderBy, limit } from 'firebase/f
 import { useNavigate } from 'react-router-dom';
 import '../css/Dashboard.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import CategoryManager from './CategoryManager';
+import IncomeCategoryManager from './IncomeCategoryManager';
 
 const Dashboard = ({ user, onLogout }) => {
     const [expenses, setExpenses] = useState([]);
