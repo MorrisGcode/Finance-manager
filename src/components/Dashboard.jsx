@@ -188,10 +188,10 @@ const Dashboard = ({ user, onLogout }) => {
             All Incomes
           </button>
           <button
-            onClick={() => navigate("/add-savings")}
-            className="menu-item"
+            onClick={() => navigate("/savings")}
+            className={`menu-item ${location.pathname === '/savings' ? 'active' : ''}`}
           >
-            <span>Savings Goal</span>
+            Savings
           </button>
         </nav>
         <button 

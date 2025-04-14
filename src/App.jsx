@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { auth } from "/config/firebase";
+import { auth } from "../config/firebase"; // Fix the import path
 import { onAuthStateChanged } from "firebase/auth";
 import Layout from "./components/Layout";
 import Login from "./components/Login";
@@ -16,11 +16,30 @@ import AllExpenses from "./components/AllExpenses";
 import Income from "./components/Income";
 import AllIncomes from "./components/AllIncomes";
 import Savings from "./components/Savings";
+import CategoryManager from "./components/CategoryManager";
+import IncomeCategoryManager from "./components/IncomeCategoryManager";
 import "./App.css";
+
+// Create a PrivateRoute component for protected routes
+const PrivateRoute = ({ children, user }) => {
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      setUser(null);
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -42,44 +61,59 @@ function App() {
 
   return (
     <Router>
-      {!user ? (
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route
-            path="/login"
-            element={<Login user={user} setUser={setUser} />}
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={!user ? <Landing /> : <Navigate to="/dashboard" replace />} />
+        <Route 
+          path="/login" 
+          element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" replace />} 
+        />
+
+        {/* Protected routes wrapped in Layout */}
+        <Route
+          element={
+            <PrivateRoute user={user}>
+              <Layout user={user} onLogout={handleLogout} />
+            </PrivateRoute>
+          }
+        >
+          <Route 
+            path="/dashboard" 
+            element={<Dashboard user={user} onLogout={handleLogout} />} 
           />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-      ) : (
-        <Layout user={user} onLogout={() => auth.signOut()}>
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard user={user} />} />
-            <Route
-              path="/add-expense"
-              element={<Expenses user={user} />}
-            />
-            <Route
-              path="/all-expenses"
-              element={<AllExpenses user={user} />}
-            />
-            <Route
-              path="/add-income"
-              element={<Income user={user} />}
-            />
-            <Route
-              path="/all-incomes"
-              element={<AllIncomes user={user} />}
-            />
-            <Route
-              path="/add-savings"
-              element={<Savings user={user} />}
-            />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
-        </Layout>
-      )}
+          <Route 
+            path="/expenses" 
+            element={<Expenses user={user} onLogout={handleLogout} />} 
+          />
+          <Route 
+            path="/expense-categories" 
+            element={<CategoryManager user={user} onLogout={handleLogout} />} 
+          />
+          <Route 
+            path="/income-categories" 
+            element={<IncomeCategoryManager user={user} onLogout={handleLogout} />} 
+          />
+          <Route 
+            path="/all-expenses" 
+            element={<AllExpenses user={user} onLogout={handleLogout} />} 
+          />
+          <Route 
+            path="/income" 
+            element={<Income user={user} onLogout={handleLogout} />} 
+          />
+          <Route 
+            path="/all-incomes" 
+            element={<AllIncomes user={user} onLogout={handleLogout} />} 
+          />
+          <Route 
+            path="/savings" 
+            element={<Savings user={user} onLogout={handleLogout} />} 
+          />
+        </Route>
+
+        {/* Catch all route */}
+        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} replace />} />
+      </Routes>
     </Router>
   );
 }

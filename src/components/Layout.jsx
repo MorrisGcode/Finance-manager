@@ -1,8 +1,8 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import '../css/Layout.css';
 
-const Layout = ({ user, onLogout, children }) => {
+const Layout = ({ user, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -50,12 +50,15 @@ const Layout = ({ user, onLogout, children }) => {
             Savings
           </button>
         </nav>
-        <button onClick={onLogout} className="logout-btn">
+        <button 
+          onClick={onLogout} 
+          className="logout-btn"
+        >
           Logout
         </button>
       </aside>
       <main className="main-content">
-        {children}
+        <Outlet />
       </main>
     </div>
   );

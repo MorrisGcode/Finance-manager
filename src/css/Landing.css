@@ -1,7 +1,7 @@
 .landing-container {
     min-height: 100vh;
     width: 100vw;
-    background: linear-gradient(135deg, #6A5ACD, #483D8B);
+    background-color: #6A5ACD;
     display: flex;
     justify-content: center;
     align-items: center;

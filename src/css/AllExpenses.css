@@ -41,6 +41,51 @@
     background-color: #38a169;
 }
 
+/* Filters Styles */
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: 500;
+    color: #4a5568;
+}
+
+.date-filter,
+.category-filter {
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.clear-filter-btn {
+    padding: 0.5rem 1rem;
+    background-color: #edf2f7;
+    border: none;
+    border-radius: 4px;
+    color: #4a5568;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.clear-filter-btn:hover {
+    background-color: #e2e8f0;
+}
+
 /* Expenses Grid */
 .expenses-grid {
     display: grid;
@@ -153,5 +198,18 @@
     .table-container {
         margin: 0 -1rem;
         border-radius: 0;
+    }
+
+    .filters-container {
+        flex-direction: column;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .date-filter,
+    .category-filter {
+        flex: 1;
     }
 }
