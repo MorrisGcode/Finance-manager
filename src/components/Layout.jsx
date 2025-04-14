@@ -10,7 +10,7 @@ const Layout = ({ user, onLogout }) => {
     <div className="app-layout">
       <aside className="side-menu">
         <div className="menu-header">
-          <h3>Expense Manager</h3>
+          <h3>Finance Manager</h3>
         </div>
         <nav className="menu-items">
           <button
@@ -20,14 +20,14 @@ const Layout = ({ user, onLogout }) => {
             Dashboard
           </button>
           <button
-            onClick={() => navigate("/expenses")}
-            className={`menu-item ${location.pathname === '/expenses' ? 'active' : ''}`}
+            onClick={() => navigate("/CategoryManager")}
+            className={`menu-item ${location.pathname === '/CategoryManager' ? 'active' : ''}`}
           >
             Manage Expenses
           </button>
           <button
-            onClick={() => navigate("/income")}
-            className={`menu-item ${location.pathname === '/income' ? 'active' : ''}`}
+            onClick={() => navigate("/IncomeCategoryManager")}
+            className={`menu-item ${location.pathname === '/IncomeCategoryManager' ? 'active' : ''}`}
           >
             Manage Income
           </button>

@@ -1,7 +1,7 @@
 .all-incomes-container {
     padding: 2rem;
     max-width: 1200px;
-    margin-left: 150px;
+    margin-left: 200px;
 }
 
 .all-incomes-header {
@@ -26,7 +26,7 @@
 
 .add-income-btn {
     padding: 0.75rem 1.5rem;
-    background-color: #48bb78;
+    background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 6px;
@@ -36,7 +36,7 @@
 }
 
 .add-income-btn:hover {
-    background-color: #38a169;
+    background-color: #4CAF50;
 }
 
 .table-container {
@@ -166,6 +166,14 @@
   color: #4CAF50;
   margin-top: 1rem;
 }
+
+.chart-container {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
 
 /* Responsive Design */
 @media (max-width: 768px) {

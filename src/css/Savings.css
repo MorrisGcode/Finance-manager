@@ -27,7 +27,7 @@
 
 .new-saving-btn {
   padding: 0.75rem 1.5rem;
-  background-color: #4299e1;
+  background-color: #48bb78;
   color: white;
   border: none;
   border-radius: 6px;
@@ -36,7 +36,7 @@
 }
 
 .new-saving-btn:hover {
-  background-color: #3182ce;
+  background-color: #4CAF50;
 }
 
 .savings-form {

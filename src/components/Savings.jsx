@@ -75,7 +75,7 @@ function Savings({ user }) {
           createdAt: new Date().toISOString(),
           savingId: savingRef.id,
           savingTitle: title.trim(),
-          type: 'expense' // Add this field
+          type: 'expense' 
         };
 
         await addDoc(collection(db, 'expenses'), expenseData);
@@ -112,7 +112,7 @@ function Savings({ user }) {
     try {
       const savingDoc = savings.find(s => s.id === savingId);
       
-      // First add the amount as an expense
+      // add the amount as an expense
       const expenseData = {
         amount: newAmount,
         category: 'Savings',
@@ -127,7 +127,7 @@ function Savings({ user }) {
 
       await addDoc(collection(db, 'expenses'), expenseData);
 
-      // Then update the savings amount
+      // update the savings amount
       const updatedAmount = currentAmount + newAmount;
       await updateDoc(doc(db, 'savings', savingId), {
         currentAmount: updatedAmount,

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '/config/firebase';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import '../css/AllIncomes.css';
 
 const AllIncomes = ({ user }) => {
@@ -74,11 +75,29 @@ const AllIncomes = ({ user }) => {
     setTotalFilteredIncomes(total);
   }, [filteredIncomes]);
 
+  const incomeCategoryTotals = {};
+
+filteredIncomes.forEach(income => {
+  if (incomeCategoryTotals[income.category]) {
+    incomeCategoryTotals[income.category] += typeof income.amount === 'string' ? parseFloat(income.amount) : income.amount;
+  } else {
+    incomeCategoryTotals[income.category] = typeof income.amount === 'string' ? parseFloat(income.amount) : income.amount;
+  }
+});
+
+const incomePieChartData = Object.entries(incomeCategoryTotals).map(([category, total]) => ({
+  name: category,
+  value: total,
+}));
+
+const COLORS = ['#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#AF19FF', '#8884d8', '#a8328e'];
+
+
   return (
     <div className="all-incomes-container">
       <header className="incomes-header">
         <div className="header-content">
-          <h2>Income History</h2>
+          <h2>All Incomes</h2>
           <div className="filters-container">
             <div className="filter-group">
               <label htmlFor="dateFilter">Filter by Date:</label>
@@ -121,7 +140,7 @@ const AllIncomes = ({ user }) => {
           </div>
         </div>
         <button
-          onClick={() => navigate("/add-income")}
+          onClick={() => navigate("/income")}
           className="add-income-btn"
         >
           <span className="btn-icon">+</span>
@@ -137,12 +156,55 @@ const AllIncomes = ({ user }) => {
       ) : error ? (
         <div className="error-message">{error}</div>
       ) : (
+        <>
+        {filteredIncomes.length > 0 && (
+          <div className="chart-container">
+            <h3>Income Distribution</h3>
+            <ResponsiveContainer width="100%" height={350}>
+              <PieChart>
+                <Pie
+                  data={incomePieChartData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  outerRadius={120}
+                  fill="#8884d8"
+                  dataKey="value"
+                  label={({ cx, cy, midAngle, innerRadius, outerRadius, value, index }) => {
+                    const RADIAN = Math.PI / 180;
+                    const radius = 25 + innerRadius + (outerRadius - innerRadius);
+                    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+        
+                    return (
+                      <text
+                        x={x}
+                        y={y}
+                        fill={COLORS[index % COLORS.length]}
+                        textAnchor={x > cx ? 'start' : 'end'}
+                        dominantBaseline="central"
+                      >
+                        {incomePieChartData[index].name} ({value.toFixed(2)})
+                      </text>
+                    );
+                  }}
+                >
+                  {incomePieChartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value) => `Ksh ${Number(value).toFixed(2)}`} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        )}
+        
         <div className="table-container">
           {filteredIncomes.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon">💰</div>
               <p className="empty-message">No incomes recorded yet.</p>
-              <p className="empty-subtitle">Start by adding your first income</p>
             </div>
           ) : (
             <table className="incomes-table">
@@ -176,6 +238,7 @@ const AllIncomes = ({ user }) => {
             </table>
           )}
         </div>
+        </>
       )}
     </div>
   );

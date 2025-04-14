@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { auth } from "../config/firebase"; // Fix the import path
+import { auth } from "/config/firebase"; 
 import { onAuthStateChanged } from "firebase/auth";
 import Layout from "./components/Layout";
 import Login from "./components/Login";
@@ -69,7 +69,7 @@ function App() {
           element={!user ? <Login setUser={setUser} /> : <Navigate to="/dashboard" replace />} 
         />
 
-        {/* Protected routes wrapped in Layout */}
+        {/* wrapped in Layout */}
         <Route
           element={
             <PrivateRoute user={user}>
