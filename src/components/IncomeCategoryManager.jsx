@@ -80,7 +80,8 @@ const IncomeCategoryManager = ({ user }) => {
 
   return (
     <div className="category-manager income-category-manager">
-      <div className="table-container">
+    <h3>Manage Income Categories</h3>
+       <div className="table-container">
         <table className="categories-table">
           <thead>
             <tr>

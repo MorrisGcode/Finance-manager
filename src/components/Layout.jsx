@@ -21,13 +21,13 @@ const Layout = ({ user, onLogout }) => {
           </button>
           <button
             onClick={() => navigate("/CategoryManager")}
-            className={`menu-item ${location.pathname === '/CategoryManager' ? 'active' : ''}`}
+            className={`menu-item ${location.pathname === '/categorymanager' ? 'active' : ''}`}
           >
             Manage Expenses
           </button>
           <button
-            onClick={() => navigate("/IncomeCategoryManager")}
-            className={`menu-item ${location.pathname === '/IncomeCategoryManager' ? 'active' : ''}`}
+            onClick={() => navigate("/incomecategorymanager")}
+            className={`menu-item ${location.pathname === '/incomecategorymanager' ? 'active' : ''}`}
           >
             Manage Income
           </button>

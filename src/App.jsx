@@ -86,11 +86,11 @@ function App() {
             element={<Expenses user={user} onLogout={handleLogout} />} 
           />
           <Route 
-            path="/expense-categories" 
+            path="/CategoryManager" 
             element={<CategoryManager user={user} onLogout={handleLogout} />} 
           />
           <Route 
-            path="/income-categories" 
+            path="/incomecategorymanager" 
             element={<IncomeCategoryManager user={user} onLogout={handleLogout} />} 
           />
           <Route 

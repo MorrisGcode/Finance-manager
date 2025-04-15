@@ -11,8 +11,8 @@ const Dashboard = ({ user, onLogout }) => {
     const [expenses, setExpenses] = useState([]);
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
-    const [showCategoryManager, setShowCategoryManager] = useState(false);
-    const [showIncomeCategoryManager, setShowIncomeCategoryManager] = useState(false);
+    // const [showCategoryManager, setShowCategoryManager] = useState(false);
+    // const [showIncomeCategoryManager, setShowIncomeCategoryManager] = useState(false);
     const [categories, setCategories] = useState([]);
     const navigate = useNavigate();
     const chartRef = useRef(null);
@@ -149,32 +149,21 @@ const Dashboard = ({ user, onLogout }) => {
                 </div>
                 <nav className="menu-items">
                     <button
-                        onClick={() => {
-                            navigate("/dashboard");
-                            setShowCategoryManager(false);
-                            setShowIncomeCategoryManager(false);
-                        }}
-                        className={`menu-item ${!showCategoryManager && !showIncomeCategoryManager ? "active" : ""
-                            }`}
+                        onClick={() => navigate("/dashboard")}
+                        className="menu-item"
                     >
                         Dashboard
                     </button>
                     <button
-                        onClick={() => {
-                            setShowCategoryManager(true);
-                            setShowIncomeCategoryManager(false);
-                        }}
-                        className={`menu-item ${showCategoryManager ? "active" : ""}`}
-                    >
+                         onClick={() => navigate("/categorymanager")}
+                         className="menu-item"
+                     >
                         Manage Expense Categories
                     </button>
                     <button
-                        onClick={() => {
-                            setShowCategoryManager(false);
-                            setShowIncomeCategoryManager(true);
-                        }}
-                        className={`menu-item ${showIncomeCategoryManager ? "active" : ""}`}
-                    >
+                         onClick={() => navigate("/incomecategorymanager")}
+                         className="menu-item"
+                     >
                         Manage Income Categories
                     </button>
                     <button
@@ -206,24 +195,7 @@ const Dashboard = ({ user, onLogout }) => {
             </div>
 
             <div className="dashboard-container">
-                {showCategoryManager ? (
-                    <div className="categories-dashboard">
-                        <header className="categories-header">
-                            <h2>Expense Categories</h2>
-                            <p>Manage your expense categories here</p>
-                        </header>
-
-                        <CategoryManager user={user} />
-                    </div>
-                ) : showIncomeCategoryManager ? (
-                    <div className="categories-dashboard">
-                        <header className="categories-header">
-                            <h2>Income Categories</h2>
-                            <p>Manage your income categories here</p>
-                        </header>
-                        <IncomeCategoryManager user={user} />
-                    </div>
-                ) : (
+                
                     <>
                         <header className="dashboard-header">
                             <h1>Welcome, {user?.displayName || user.email}!</h1>
@@ -307,7 +279,7 @@ const Dashboard = ({ user, onLogout }) => {
                             </div>
                         </div>
                     </>
-                )}
+                
             </div>
         </div>
     );
