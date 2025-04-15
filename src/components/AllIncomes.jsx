@@ -63,9 +63,10 @@ const AllIncomes = ({ user }) => {
   }, [user]);
 
   const filteredIncomes = incomes.filter(income => {
-    const matchesDate = !dateFilter || income.date === dateFilter;
-    const matchesCategory = !categoryFilter || categoryFilter === 'All Categories' || 
-      income.category === categoryFilter;
+    const incomeDate = new Date(income.date).toISOString().split('T')[0];
+    const matchesDate = !dateFilter || incomeDate === dateFilter;
+    const matchesCategory =
+      !categoryFilter || categoryFilter === 'All Categories' || income.category === categoryFilter;
     return matchesDate && matchesCategory;
   });
 

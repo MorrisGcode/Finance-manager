@@ -93,7 +93,7 @@ const AllExpenses = ({ user }) => {
 
     const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
 
-    // Prepare data for the pie chart
+    // data for the pie chart
     const categoryTotals = {};
     filteredExpenses.forEach(expense => {
         if (categoryTotals[expense.category]) {

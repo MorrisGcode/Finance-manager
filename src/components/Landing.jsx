@@ -8,7 +8,8 @@ function Landing() {
   return (
     <div className="landing-container">
       <div className="landing-content">
-        <h1>Take Control of Your Finances</h1>
+        <h1>MONETA</h1>
+        <h2>Take Control of Your Finances</h2>
         <div className="tagline">
           <p className="main-text">Smart money management starts here</p>
           <p className="sub-text">Track expenses, monitor income, and achieve your financial goals</p>
