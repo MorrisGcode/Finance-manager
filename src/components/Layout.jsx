@@ -23,13 +23,13 @@ const Layout = ({ user, onLogout }) => {
             onClick={() => navigate("/CategoryManager")}
             className={`menu-item ${location.pathname === '/categorymanager' ? 'active' : ''}`}
           >
-            Manage Expenses
+            Manage Expenses Categories
           </button>
           <button
             onClick={() => navigate("/incomecategorymanager")}
             className={`menu-item ${location.pathname === '/incomecategorymanager' ? 'active' : ''}`}
           >
-            Manage Income
+            Manage Income Categories
           </button>
           <button
             onClick={() => navigate("/all-expenses")}
