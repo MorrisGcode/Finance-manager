@@ -256,7 +256,7 @@ function Savings({ user }) {
                   placeholder="0.00"
                   required
                   min="0"
-                  step="0.01"
+                  // step="0.01"
                   className="form-input"
                 />
               </div>

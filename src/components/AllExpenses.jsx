@@ -7,6 +7,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 
 // default categories 
 const defaultExpenseCategories = [
+    'Utilities',
     'Food',
     'Transport',
     'Entertainment',
